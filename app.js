@@ -1,9 +1,11 @@
     require('dotenv').config();
     const express = require('express');
+    const cors = require('cors');
     const mongoose = require('mongoose');
     const {Schema} = mongoose
     const app = express();
-
+    
+    app.use(cors())
     app.use(express.json());  // Parses JSON payloads
     app.use(express.urlencoded({ extended: true }));
 
