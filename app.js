@@ -1,0 +1,62 @@
+    const express = require('express');
+    const mongoose = require('mongoose');
+    const {Schema} = mongoose
+    const app = express();
+
+    app.use(express.json());  // Parses JSON payloads
+    app.use(express.urlencoded({ extended: true }));
+
+    // Connect to MongoDB
+    const connectDB = async () => {
+    try {
+        await mongoose.connect('mongodb+srv://ducmy2610:ducmy2610@db.ugvan.mongodb.net/?retryWrites=true&w=majority&appName=db');
+
+        console.log('MongoDB connected successfully');
+    } catch (error) {
+        console.error('MongoDB connection failed:', error);
+        process.exit(1);
+    }
+    };
+    connectDB();
+
+    const videoSchema = new Schema({ url: String });
+    const Video = mongoose.model('Video', videoSchema);
+
+    const getVideo = async () => {
+    const videos = await Video.find();
+    return videos;
+    }
+
+    const addVideo = async (url) => {
+    const video = new Video({ url });
+    return await video.save();
+    }
+
+    const deleteAllVideos = async () => {
+        return await Video.deleteMany();
+    }
+
+    const deleteVideoByUrl = async (url) => {
+        return await Video.deleteOne({url});
+    }
+
+    app.get('/api/v1/get-video', async (req, res) => {
+    res.json({data: await getVideo()});
+    });
+
+    app.post('/api/v1/add-video', async (req, res) => {
+        const {url} = req.body;
+        res.json({message: await addVideo(url)});
+    });
+
+    app.post('/api/v1/delete-videos', async (req, res) => {
+        res.json({message: await deleteAllVideos()});
+    });
+
+    app.post('/api/v1/delete-video', async (req, res) => {
+        const {url} = req.body;
+        res.json({message: await deleteVideoByUrl(url)});
+    });
+
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
