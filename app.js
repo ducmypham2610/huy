@@ -1,3 +1,4 @@
+    require('dotenv').config();
     const express = require('express');
     const mongoose = require('mongoose');
     const {Schema} = mongoose
@@ -9,7 +10,7 @@
     // Connect to MongoDB
     const connectDB = async () => {
     try {
-        await mongoose.connect('mongodb+srv://ducmy2610:ducmy2610@db.ugvan.mongodb.net/?retryWrites=true&w=majority&appName=db');
+        await mongoose.connect(process.env.MONGODB_URI);
 
         console.log('MongoDB connected successfully');
     } catch (error) {
