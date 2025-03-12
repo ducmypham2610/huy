@@ -9,6 +9,7 @@
     app.use(express.json());  // Parses JSON payloads
     app.use(express.urlencoded({ extended: true }));
 
+    console.log('Hello from server')
     // Connect to MongoDB
     const connectDB = async () => {
     try {
