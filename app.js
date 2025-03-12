@@ -26,25 +26,35 @@
     const Video = mongoose.model('Video', videoSchema);
 
     const getVideo = async () => {
-    const videos = await Video.find();
-    return videos;
+        console.log('Getting video');
+        const videos = await Video.find();
+        console.log('Videos: ', JSON.stringify(videos));
+        return videos;
     }
 
     const addVideo = async (url) => {
-    const video = new Video({ url });
-    return await video.save();
+        console.log('Adding video:', url);
+        const video = new Video({ url });
+        console.log('Video added: ', JSON.stringify(video));
+        return await video.save();
     }
 
     const deleteAllVideos = async () => {
-        return await Video.deleteMany();
+        console.log('Deleting all videos');
+        const result = await Video.deleteMany();
+        console.log('Delete result: ', JSON.stringify(result));
+        return result;
     }
 
     const deleteVideoByUrl = async (url) => {
-        return await Video.deleteOne({url});
+        console.log('Deleting video by url:', url);
+        const result = await Video.deleteOne({url});
+        console.log('Delete result: ', JSON.stringify(result));
+        return result;
     }
 
     app.get('/api/v1/get-video', async (req, res) => {
-    res.json({data: await getVideo()});
+        res.json({data: await getVideo()});
     });
 
     app.post('/api/v1/add-video', async (req, res) => {
@@ -56,7 +66,7 @@
         res.json({message: await deleteAllVideos()});
     });
 
-    app.post('/api/v1/delete-video', async (req, res) => {
+    app.post('/api/v1/delete-video', async (req, res) => {  
         const {url} = req.body;
         res.json({message: await deleteVideoByUrl(url)});
     });
